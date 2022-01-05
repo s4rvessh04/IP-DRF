@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-otwbw%xzaoin71(z&h&9m)+#-$389qu-ue4qah7nteq$y65)rg
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['ip-drf.herokuapp.com', 'localhost']
+ALLOWED_HOSTS = ['ip-drf.herokuapp.com', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework_simplejwt',
+    'rest_framework',
     'app',
     'api'
 ]
@@ -125,3 +127,9 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ]
+}
