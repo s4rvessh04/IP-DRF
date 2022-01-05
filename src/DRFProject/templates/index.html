@@ -1,8 +1,16 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Login Page{% endblock %}
+{% block title %}Home Page{% endblock %}
 
 {% block content %}
-<main>{{ message }}</main>
+<main class="flex flex-col items-center justify-center h-screen w-screen bg-gray-100 py-2 px-4">
+    <h1 class="text-2xl font-semibold font-mono mb-5">Welcome User</h1>
+    <h5 class="text-lg mb-5">Choose an action</h5>
+    <div class="grid grid-cols-2 gap-4 lg:w-1/4 h-auto w-full">
+        <a href="/login" class="bg-green-600 py-3 rounded-lg text-white text-center"><button class="font-semibold">Login</button></a>
+        <a href="/signup" class="bg-white border border-gray-300 py-3 rounded-lg text-center"><button class="font-semibold">SignUp</button></a>
+    </div>
+
+</main>
 {% endblock %}

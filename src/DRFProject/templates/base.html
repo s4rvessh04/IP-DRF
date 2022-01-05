@@ -3,12 +3,22 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">{% load static %}
-    {% block css %}{% endblock %}
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {% load static %}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {}
+            }
+        }
+    </script>
+    {% block style %}{% endblock %}
     <title>{% block title %}{% endblock %}</title>
 </head>
 
-<body>
+
+<body class="text-gray-900">
     {% block content %} {% endblock %}
 </body>
 

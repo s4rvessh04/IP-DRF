@@ -12,3 +12,20 @@ def login_view(request):
         "message": "This is login page"
     }
     return render(request, 'login.html', context=context)
+
+def signup_view(request):
+    context = {
+        "message": "This is login page"
+    }
+    return render(request, 'signup.html', context=context)
+
+def user_view(request):
+    context = {
+        "username": "Username",
+        "fields": [
+            {"label": "Username", "value":"Sarvesh"}, 
+            {"label": "Email", "value":"email@email.com"}, 
+            {"label": "Address", "value":"Some long address"}
+        ]
+    }
+    return render(request, 'user.html', context=context)
