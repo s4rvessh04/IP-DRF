@@ -1,1 +1,1 @@
-web: gunicorn DRFProject.wsgi --log-file -
+web: gunicorn src/DRFProject.wsgi --log-file -
