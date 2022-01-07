@@ -1,4 +1,6 @@
+import os
 import requests
+from dotenv import load_dotenv
 
 from django.urls import reverse
 from django.shortcuts import redirect, render
@@ -7,12 +9,18 @@ from django.contrib import messages
 from .forms import UserLogInForm, UserSignUpForm
 
 
+load_dotenv()
+
+def handle_api_url(abstract_path: str):
+    return str(os.getenv('API_URL') + abstract_path)
+
+
 def index_view(request):
     context = {
         "message": "This is Homepage"
     }
     return render(request, 'index.html', context=context)
-    
+
 
 def user_view(request, token: str):
     if request.method == 'POST':
@@ -23,10 +31,10 @@ def user_view(request, token: str):
             if v == '' or k == 'csrfmiddlewaretoken': continue
             else: cleaned_form_data[k] = v
 
-        response = requests.put("http://localhost:8000/api/v1/user/", data=cleaned_form_data, cookies={'jwt': token}).json()
+        response = requests.put(handle_api_url("api/v1/user/"), data=cleaned_form_data, cookies={'jwt': token}).json()
         return redirect(reverse('user_view', kwargs={'token': token}))
     else:
-        user = requests.get("http://localhost:8000/api/v1/user/", cookies={'jwt': token}).json()
+        user = requests.get(handle_api_url("api/v1/user/"), cookies={'jwt': token}).json()
         context = {
             "token": token,
             "fields": [
@@ -47,8 +55,8 @@ def handle_user_delete_data(request, token: str, item_field: str):
     if item_field in ['username', 'email']:
         messages.error("Can't set required field to null")
         return redirect(reverse('user_view', kwargs={'token': token}))
-    user = requests.put("http://localhost:8000/api/v1/user/", data=payload, cookies={'jwt': token}).json()
-    print(user)
+    user = requests.put(handle_api_url("api/v1/user/"), data=payload, cookies={'jwt': token}).json()
+
     return redirect(reverse('user_view', kwargs={'token': token}))
 
 
@@ -59,7 +67,7 @@ def login_view(request):
         form = UserLogInForm(request.POST)
 
         if form.is_valid():
-            response = requests.post("http://localhost:8000/api/v1/login/", data={'email': form.cleaned_data.get('email'), 'password': form.cleaned_data.get('password')})
+            response = requests.post(handle_api_url("api/v1/login/"), data={'email': form.cleaned_data.get('email'), 'password': form.cleaned_data.get('password')})
             token = response.cookies.get('jwt')
             if token:
                 return redirect(reverse('user_view', kwargs={'token': response.cookies.get('jwt')}))
@@ -95,7 +103,7 @@ def signup_view(request):
                     "address": address, 
                     "password": password2
                 }
-                response = requests.post('http://localhost:8000/api/v1/register/', data=payload)
+                response = requests.post(handle_api_url("api/v1/register/"), data=payload)
                 if response.ok:
                     messages.success(request, 'Account created')
                     return redirect(reverse('login_view'))
@@ -106,5 +114,5 @@ def signup_view(request):
 
 
 def logout_view(request, token: str):
-    response = requests.post("http://localhost:8000/api/v1/logout/", cookies={'jwt': token}).json()
+    response = requests.post(handle_api_url("api/v1/logout/"), cookies={'jwt': token}).json()
     return redirect(reverse('login_view'))
