@@ -20,8 +20,10 @@ from app import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index_view, name='home'),
-    path('login/', views.login_view, name='login'),
-    path('signup/', views.signup_view, name='signup'),
-    path('user/', views.user_view, name='user'),
+    path('login/', views.login_view, name='login_view'),
+    path('logout/<str:token>', views.logout_view, name='logout_view'),
+    path('delete_user_data_item/<str:token>/<str:item_field>', views.handle_user_delete_data, name='delete_user_data_item'),
+    path('signup/', views.signup_view, name='signup_view'),
+    path('user/<str:token>', views.user_view, name='user_view'),
     path('api/v1/', include('api.urls'))
 ]

@@ -1,28 +1,36 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Hello Username{% endblock %}
+{% block title %}Hello User{% endblock %}
 
 {% block content %}
 <main class="flex flex-col items-center justify-center h-screen w-screen bg-gray-100 py-2 px-4">
     <div class="lg:w-2/5 w-full bg-white border rounded-xl px-4 py-7 h-fit">
     <h1 class="text-xl mb-4 font-bold">User Details</h1>
-    {% for field in fields %}
-        <div class="px-1 py-3 w-full flex justify-between lg:space-x-4 space-x-2">
-            <div class="flex flex-col flex-1">
-                <label class="text-base mb-2 font-medium text-gray-600">{{field.label}}</label>
-                <input type="text" class="border border-gray-400 rounded-lg p-2" value="{{field.value}}">
-            </div>
-            <div class="flex flex-col items-center">
-                <label class="text-base mb-2 font-medium text-gray-600">Actions</label>
-                <div class="flex space-x-2">
-                    <button class="border px-5 py-2 rounded-lg bg-blue-600 text-white">Edit</button>
-                    <button class="border px-5 py-2 rounded-lg bg-red-600 text-white">Delete</button>
+    <form method="POST">
+        {% csrf_token %}
+        {% for field in fields %}
+            <div class="px-1 py-3 w-full flex justify-between lg:space-x-4 space-x-2">
+                <div class="flex flex-col flex-1">
+                    <label class="text-base mb-2 font-medium text-gray-600">{{field.label}}</label>
+                    <input type="text" class="border border-gray-400 rounded-lg p-2" placeholder="{{field.value}}" name="{{field.label | lower}}">
+                </div>
+                <div class="flex flex-col items-center">
+                    <label class="text-base mb-2 font-medium text-gray-600">Actions</label>
+                    <div class="flex space-x-2">
+                        <button type="submit" class="border px-5 py-2 rounded-lg bg-blue-600 text-white">Edit</button>
+                        {% if field.label == 'Address' %}
+                            <a href="{% url 'delete_user_data_item' token=token item_field=field.label|lower %}" class="border px-5 py-2 rounded-lg bg-red-600 text-white">Delete</a>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
-        </div>
-    {% endfor %}
-    <a href="/login" class="text-red-500 text-center"><button class="my-3 bg-red-50 py-3 rounded-lg border border-red-500 font-semibold w-full">Logout</button></a>
+        {% endfor %}
+    </form>
+    <a href="{% url 'logout_view' token=token %}" class="text-red-500 text-center"><button class="my-3 bg-red-50 py-3 rounded-lg border border-red-500 font-semibold w-full">Logout</button></a>
     </div>
 </main>
+{% endblock %}
+
+{% block script %}
 {% endblock %}
